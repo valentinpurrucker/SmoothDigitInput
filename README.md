@@ -1,3 +1,5 @@
+<a href="#"><img src="Assets/SmoothDigitInputIcon.png" width="400" alt="SmoothDigitInputIcon"></a>
+
 # SmoothDigitInput
 
 A simple and smooth digit input view for SwiftUI
@@ -9,6 +11,8 @@ A simple and smooth digit input view for SwiftUI
 - exposes simple but effective data store, that drives your view
 - automatically parses input into number
 
+
+![SmoothDigitInput Demo GIF](Assets/SmoothDigitInputDemo.gif)
 
 ## Installation
 
