@@ -8,9 +8,6 @@
 import SwiftUI
 
 extension AnyTransition {
-    static var smoothNumberTransition: AnyTransition {
-        AnyTransition.asymmetric(insertion: .modifier(active: DigitTransition(isActive: true), identity: DigitTransition(isActive: false)), removal: .move(edge: .bottom))
-    }
     
     static var smoothAccessoryTransition: AnyTransition {
         .move(edge: .bottom)

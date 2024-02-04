@@ -16,7 +16,7 @@ public struct SmoothDigitInputView<PrefixContent: View, SuffixContent: View>: Vi
 
     private let store: DigitStore
 
-    private let numberTransition: AnyTransition
+    private let numberTransition: AnyTransition?
 
     private let accessoryTransition: AnyTransition
 
@@ -41,7 +41,7 @@ public struct SmoothDigitInputView<PrefixContent: View, SuffixContent: View>: Vi
         self.animation = animation
         self.verticalPadding = verticalPadding
         self.spacing = spacing
-        self.numberTransition = numberTransition ?? .smoothNumberTransition
+        self.numberTransition = numberTransition
         self.accessoryTransition = accessoryTransition ?? .smoothAccessoryTransition
 
         self.store.decimalSeperator = decimalSeperator ?? Locale.current.decimalSeparator ?? "."
@@ -53,6 +53,9 @@ public struct SmoothDigitInputView<PrefixContent: View, SuffixContent: View>: Vi
     }
 
     public var body: some View {
+
+        let numTransition = self.numberTransition ?? getNumberTransition()
+
         HStack(spacing: spacing) {
 
             prefixContent
@@ -60,7 +63,7 @@ public struct SmoothDigitInputView<PrefixContent: View, SuffixContent: View>: Vi
             let enumertedDigits = Array(zip(store.inputEntries.indices, store.inputEntries))
             ForEach(enumertedDigits, id: \.1.id) { (i, digit) in
                 DigitEntryView(digit, isFirst: i == 0, decimalSeperator: store.decimalSeperator, groupingSeperator: store.groupingSeperator)
-                    .transition(digit.isNumber() ? numberTransition :  accessoryTransition)
+                    .transition(digit.isNumber() ? numTransition : accessoryTransition)
             }
 
             suffixContent
@@ -71,6 +74,10 @@ public struct SmoothDigitInputView<PrefixContent: View, SuffixContent: View>: Vi
             self.size = size
         }
         .clipped()
+    }
+
+    private func getNumberTransition() -> AnyTransition {
+        AnyTransition.asymmetric(insertion: .modifier(active: DigitTransition(isActive: true, verticalOffset: size.height), identity: DigitTransition(isActive: false, verticalOffset: size.height)), removal: .modifier(active: DigitRemovalTransition(isActive: true, verticalOffset: size.height), identity: DigitRemovalTransition(isActive: false, verticalOffset: size.height)))
     }
 }
 
